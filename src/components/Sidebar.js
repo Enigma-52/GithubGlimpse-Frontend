@@ -35,7 +35,7 @@ function Sidebar({ selectedLanguage = "All", onSelectLanguage, sortStars, sortUp
   };
 
   return (
-    <aside className="w-72 p-8 bg-gray-900 text-gray-200 shadow-lg">
+    <aside className="w-full md:w-72 p-8 bg-gray-900 text-gray-200 shadow-lg md:shadow-none mx-auto md:mx-0">
       <h2 className="text-2xl font-bold mb-6">About</h2>
       <p className="mb-8 text-sm">
       GitHub Glimpse helps contributors find most recent issues in popular open-source projects, making it easier to contribute.
