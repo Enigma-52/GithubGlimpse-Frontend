@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { FaRegComments } from 'react-icons/fa6';
+import { FaRegComments , FaHeart , FaRegHeart } from 'react-icons/fa6';
 
-function ProjectCard({ project, isSelected, onSelect }) {
+function ProjectCard({ project, isSelected, onSelect ,isFavorite, onFavoriteToggle }) {
   const [hoveredIssueId, setHoveredIssueId] = useState(null);
 
   const issuesCount = project.issues_count;
@@ -69,11 +69,22 @@ function ProjectCard({ project, isSelected, onSelect }) {
         <h3 className={`text-lg sm:text-xl font-semibold ${isSelected ? "text-green-500" : ""} mb-2 sm:mb-0`}>
           {truncateText(project.name, 40)}
         </h3>
-        <span
-          className={`px-2 py-1 rounded-full border border-green-500 text-sm font-bold ${isSelected ? "text-green-500" : "text-white"}`}
-        >
-          {issuesCount} {issuesCount === 1 ? "issue" : "issues"}
-        </span>
+        <div className="flex items-center space-x-2">
+          <span
+            className={`px-2 py-1 rounded-full border border-green-500 text-sm font-bold ${isSelected ? "text-green-500" : "text-white"}`}
+          >
+            {issuesCount} {issuesCount === 1 ? "issue" : "issues"}
+          </span>
+          <button
+            className="text-red-500"
+            onClick={(e) => {
+              e.stopPropagation();
+              onFavoriteToggle();
+            }}
+          >
+            {isFavorite ? <FaHeart /> : <FaRegHeart />}
+          </button>
+        </div>
       </div>
       <p className="text-gray-400 mb-4 text-sm sm:text-base">{truncateText(project.description, 120)}</p>
       <div className={`flex flex-col sm:flex-row items-start sm:items-center text-xs sm:text-sm ${isSelected ? "text-green-500" : "text-gray-500"}`}>
