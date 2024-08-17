@@ -13,12 +13,28 @@ const languages = [
   "C++",
   "C",
   "C#",
+  "Ruby",
+  "PHP",
+  "Swift",
+  "Kotlin",
+  "Scala",
+  "Haskell",
+  "Dart",
+  "Elixir",
+  "Clojure",
+  "Lua",
+  "R",
+  "Julia",
+  "Perl",
+  "Assembly",
+  "COBOL"
 ];
 
 function Sidebar({ selectedLanguage = "All", onSelectLanguage, sortStars, sortUpdated, onSortStarsChange, onSortUpdatedChange }) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [repoUrl, setRepoUrl] = useState('');
   const [message, setMessage] = useState('');
+  const [showMore, setShowMore] = useState(false);
 
   const handleLanguageSelect = (lang) => {
     onSelectLanguage(lang === "All" ? "All" : lang);
@@ -34,6 +50,8 @@ function Sidebar({ selectedLanguage = "All", onSelectLanguage, sortStars, sortUp
     }
   };
 
+  const displayedLanguages = showMore ? languages : languages.slice(0, 7);
+
   return (
     <aside className="w-full md:w-72 p-8 bg-gray-900 text-gray-200 shadow-lg md:shadow-none mx-auto md:mx-0">
       <h2 className="text-2xl font-bold mb-6">About</h2>
@@ -41,8 +59,8 @@ function Sidebar({ selectedLanguage = "All", onSelectLanguage, sortStars, sortUp
       GitHub Glimpse helps contributors find most recent issues in popular open-source projects, making it easier to contribute.
       </p>
       <h3 className="text-xl font-semibold mb-4">Browse by Language</h3>
-      <div className="flex flex-wrap gap-3 mb-8">
-        {languages.map((lang) => (
+      <div className="flex flex-wrap gap-3 mb-5">
+        {displayedLanguages.map((lang) => (
           <button
             key={lang}
             onClick={() => handleLanguageSelect(lang)}
@@ -56,6 +74,13 @@ function Sidebar({ selectedLanguage = "All", onSelectLanguage, sortStars, sortUp
           </button>
         ))}
       </div>
+      {/* Show More/Less button */}
+      <button
+        className="text-sm font-medium text-green-600 hover:underline mb-8"
+        onClick={() => setShowMore(!showMore)}
+      >
+        {showMore ? "Show Less" : "Show More"}
+      </button>
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Sort Options</h3>
         <div className="mb-4">
