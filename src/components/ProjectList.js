@@ -13,7 +13,7 @@ function ProjectList({ selectedLanguage, sortStars, sortUpdated, selectedTags })
   const [issueSearch, setIssueSearch] = useState('');
   const [favorites, setFavorites] = useState(() => JSON.parse(localStorage.getItem('favorites')) || []);
   const [currentPage, setCurrentPage] = useState(1);
-  const [projectsPerPage] = useState(6); // Projects per page
+  const [projectsPerPage] = useState(5); // Projects per page
 
   useEffect(() => {
     const fetchProjects = async () => {
