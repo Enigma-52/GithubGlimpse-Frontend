@@ -81,8 +81,9 @@ function ProjectCard({ project, isSelected, onSelect ,isFavorite, onFavoriteTogg
               e.stopPropagation();
               onFavoriteToggle();
             }}
+            title={isFavorite ? "Unfavorite this project" : "Favorite this project"}
           >
-            {isFavorite ? <FaHeart /> : <FaRegHeart />}
+            {isFavorite ? <FaHeart className="animate-ping-once" /> : <FaRegHeart />}
           </button>
         </div>
       </div>

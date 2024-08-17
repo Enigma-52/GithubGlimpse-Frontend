@@ -12,6 +12,8 @@ function ProjectList({ selectedLanguage, sortStars, sortUpdated, selectedTags })
   const [repoSearch, setRepoSearch] = useState('');
   const [issueSearch, setIssueSearch] = useState('');
   const [favorites, setFavorites] = useState(() => JSON.parse(localStorage.getItem('favorites')) || []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [projectsPerPage] = useState(6); // Projects per page
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -36,7 +38,6 @@ function ProjectList({ selectedLanguage, sortStars, sortUpdated, selectedTags })
     setLastSortCriterion('activity');
   }, [sortUpdated]);
 
-  // Update localStorage whenever favorites change
   useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
@@ -75,18 +76,27 @@ function ProjectList({ selectedLanguage, sortStars, sortUpdated, selectedTags })
       }
     });
 
-    // Separate favorite projects and non-favorite projects
     const favoriteProjects = sortedFiltered.filter(project => favorites.includes(project.name));
     const nonFavoriteProjects = sortedFiltered.filter(project => !favorites.includes(project.name));
 
-    // Display favorites first
     return [...favoriteProjects, ...nonFavoriteProjects];
   }, [filteredProjects, lastSortCriterion, sortStars, sortUpdated, favorites]);
+
+  // Pagination logic
+  const indexOfLastProject = currentPage * projectsPerPage;
+  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+  const currentProjects = sortedProjects.slice(indexOfFirstProject, indexOfLastProject);
+  const totalPages = Math.ceil(sortedProjects.length / projectsPerPage);
 
   const handleSelect = (projectName) => {
     setSelectedProject((prevSelected) =>
       prevSelected === projectName ? null : projectName
     );
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (loading) return <div className="flex justify-center items-center h-full">Loading...</div>;
@@ -119,10 +129,10 @@ function ProjectList({ selectedLanguage, sortStars, sortUpdated, selectedTags })
           </div>
         </div>
       </div>
-      
+
       <div className="space-y-6">
-        {sortedProjects.length > 0 ? (
-          sortedProjects.map((project) => (
+        {currentProjects.length > 0 ? (
+          currentProjects.map((project) => (
             <ProjectCard
               key={project.name}
               project={project}
@@ -137,6 +147,19 @@ function ProjectList({ selectedLanguage, sortStars, sortUpdated, selectedTags })
             No projects found matching your criteria.
           </div>
         )}
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center items-center space-x-4 mt-8">
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => handlePageChange(page)}
+            className={`px-4 py-2 rounded-md ${page === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-600 text-gray-300'}`}
+          >
+            {page}
+          </button>
+        ))}
       </div>
     </div>
   );
